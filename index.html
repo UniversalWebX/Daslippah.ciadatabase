@@ -3,231 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GIRDER // VAULT SECURE</title>
+<title>GIRDER // 1337</title>
 <style>
-  :root{--bg:#000;--accent:#39ff14;--red:#ff0033;--text:#c9d1d9;}
-  body,html{margin:0;overflow:hidden;height:100vh;background:#000;color:var(--accent);font-family:'Courier New',monospace;}
-  canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;opacity:0.15;}
-  .scanline{position:fixed;top:0;left:0;width:100%;height:5px;background:var(--accent);opacity:0.4;animation:scan 3s linear infinite;}
-  @keyframes scan{0%{transform:translateY(-10px)}100%{transform:translateY(100vh)}}
+  body,html{margin:0;height:100vh;background:#000;overflow:hidden;color:#39ff14;font-family:'Courier New',monospace;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+  canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;opacity:0.12;}
   
-  /* VAULT LOCK */
-  #vault{position:fixed;top:0;left:0;width:100vw;height: |100vh;background:rgba(0,0,0,0.98);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;}
-  .wheel{width:400px;height:400px;background:radial-gradient(#111,#000);border:12px ridge #222;border-radius:50%;position:relative;box-shadow:0 0 80px var(--accent);animation:spin 180s linear infinite;}
-  @keyframes spin{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
-  .center{width:140px;height:140px;background:#000;border:8px solid var(--accent);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 60px var(--accent);}
-  .center::after{content:"GIRDER";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;letter-spacing:10px;color:var(--accent);text-shadow:0 0 30px;}
-  .combo{font-size:50px;letter-spacing:25px;margin:40px 0;text-shadow:0 0 20px;}
-  .inputs{display:flex;gap:25px;}
-  .num{width:90px;height:90px;background:#111;border:4px solid #333;border-radius:15px;color:var(--accent);font-size:40px;text-align:center;transition:0.4s;box-shadow:0 0 20px rgba(0,0,0,0.8);}
-  .num:focus{border-color:var(--accent);box-shadow:0 0 40px var(--accent);outline:none;background:#001100;}
-  .glitch{animation:glitch 1.5s infinite;color:var(--accent);}
-  @keyframes glitch{0%,100%{text-shadow:3px 3px var(--red),-3px -3px var(--accent)}50%{text-shadow:-3px -3px var(--red),3px 3px var(--accent)}}
+  .lock{background:#000;border:20px solid #111;border-radius:30px;padding:40px 30px;box-shadow:0 0 80px #39ff14, inset 0 0 60px #000;position:relative;}
+  .title{font-size:4rem;margin-bottom:30px;letter-spacing:12px;text-shadow:0 0 30px #39ff14;animation:glitch 2s infinite;}
+  @keyframes glitch{0%,100%{text-shadow:3px 0 #ff0033,-3px 0 #39ff14}50%{text-shadow:-3px 0 #ff0033,3px 0 #39ff14}}
   
-  /* MAIN APP */
-  #app{display:none;position:relative;z-index:10;}
-  .terminal{background:#000;border:2px solid var(--accent);padding:25px;border-radius:10px;margin:20px 0;box-shadow:0 0 50px rgba(57,255,20,0.6);}
-  .terminal::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(57,255,20,0.15),transparent);animation:shine 8s linear infinite;}
-  @keyframes shine{0%{left:-100%}100%{left:100%}}
-  nav button{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:15px 30px;margin:8px;cursor:pointer;transition:0.3s;border-radius:6px;}
-  nav button:hover,nav button.active{background:var(--accent);color:#000;transform:scale(1.15);box-shadow:0 0 30px var(--accent);}
-  .debt-number{font-size:4.5rem;color:var(--red);text-shadow:0 0 40px var(--red);animation:pulse 1.8s infinite;}
-  @keyframes pulse{0%,100%{opacity:0.7}50%{opacity:1}}
+  .wheels{display:flex;gap:20px;}
+  .wheel{position:relative;width:90px;height:360px;background:#000;border:6px solid #222;border-radius:15px;overflow:hidden;box-shadow:inset 0 0 40px #000, 0 0 30px #39ff14;}
+  .numbers{position:absolute;width:100%;text-align:center;font-size:64px;line-height:90px;user-select:none;transition:transform 0s;}
+  .number{color:#39ff14;text-shadow:0 0 20px;}
+  .highlight{color:#39ff14;text-shadow:0 0 40px #39ff14;font-size:80px !important;line-height:90px !important;}
   
-  /* NUKE FLASHING CHAOS */
-  .nuke-flash{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;pointer-events:none;animation:flash 0.15s infinite;display:none;}
-  @keyframes flash{
-    0%,100%{background:#000000}
-    50%{background:#ff0033}
-  }
-  .nuke-flash.green{animation:flashgreen 0.12s infinite;}
-  @keyframes flashgreen{
-    0%,100%{background:#000000}
-    50%{background:#39ff14}
-  }
+  .arrow{cursor:pointer;position:absolute;left:50%;transform:translateX(-50%);background:rgba(0,255,20,0.1);width:100%;height:50px;display:flex;align-items:center;justify-content:center;font-size:50px;z-index:10;}
+  .up{top:0;}
+  .down{bottom:0;}
+  
+  .status{margin-top:40px;font-size:28px;min-height:50px;}
 </style>
 </head>
 <body>
 
 <canvas id="matrix"></canvas>
-<div class="scanline"></div>
 
-<!-- COMBINATION VAULT (16-12-13) -->
-<div id="vault">
-  <div class="wheel"><div class="center"></div></div>
-  <h1 class="glitch">GIRDER VAULT</h1>
-  <p style="font-size:20px;opacity:0.7;">SECURE ACCESS POINT // 2025-2030</p>
-  <div class="combo" id="display">-- - -- - --</div>
-  <div class="inputs">
-    <input type="text" maxlength="2" class="num" id="a">
-    <input type="text" maxlength="2" class="num" id="b">
-    <input type="text" maxlength="2" class="num" id="c">
-  </div>
-  <p id="msg" style="margin-top:30px;color:#ff0033;height:30px;"></p>
+<div class="lock">
+  <div class="title">GIRDER</div>
+  <div class="wheels" id="wheels"></div>
+  <div class="status" id="status">SET COMBINATION: 1337</div>
 </div>
-
-<!-- MAIN APP -->
-<div id="app" class="container" style="padding:20px;max-width:1300px;margin:0 auto;">
-  <h1 class="glitch" style="text-align:center;font-size:5rem;margin:40px 0;">GIRDER</h1>
-  <nav style="text-align:center;">
-    <button class="active" onclick="tab('blog')">Bulletin</button>
-    <button onclick="tab('search')">Subject Lookup</button>
-    <button onclick="tab('debt')">Debt Clock</button>
-    <button onclick="tab('config')">Configuration</button>
-  </nav>
-
-  <div id="blog" class="tab active">
-    <div class="terminal"><h2 style="color:var(--accent);">PANDORA PROTOCOL ACTIVE</h2><p>Global surveillance grid online. All targets indexed.</p>
-      <div style="text-align:center;margin:50px;"><button onclick="flashAccess()" style="font-size:2rem;padding:25px 60px;">ENTER TERMINAL</button></div>
-    </div>
-  </div>
-
-  <div id="search" class="tab">
-    <div class="terminal">
-      <h2>SUBJECT ACQUISITION</h2>
-      <input type="text" id="query" placeholder="ENTER TARGET..." style="width:100%;max-width:700px;padding:15px;font-size:18px;">
-      <button onclick="search()" style="padding:15px 40px;font-size:18px;margin-top:10px;">QUERY</button>
-      <div id="result" class="terminal" style="margin-top:30px;display:none;">
-        <h3 style="color:var(--accent);">CLASSIFIED DOSSIER</h3>
-        <div id="data"></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="debt" class="tab">
-    <div class="terminal" style="text-align:center;">
-      <h2 style="color:var(--red);">U.S. NATIONAL DEBT // LIVE</h2>
-      <div class="debt-number" id="debt">$36,412,847,291,003</div>
-      <p style="font-size:24px;color:var(--red);margin:20px;">+ $1.84 MILLION PER MINUTE</p>
-    </div>
-  </div>
-
-  <div id="config" class="tab">
-    <div class="terminal">
-      <h2 style="color:var(--accent);">ROOT COMMAND INTERFACE</h2>
-      <div style="padding:15px 0;border-bottom:1px dotted #333;"><span>PRISM Full-Take</span><span style="float:right;color:var(--accent);">● ACTIVE</span></div>
-      <div style="padding:15px 0;border-bottom:1px dotted #333;"><span>MUSCULAR Intercept</span><span style="float:right;color:var(--accent);">● ACTIVE</span></div>
-      <div style="padding:20px 0;color:var(--red);font-weight:bold;font-size:20px;">
-        <span>NUKE PROTOCOL</span>
-        <label style="float:right;">
-          <input type="checkbox" id="nuke" onchange="nuke()"> ARM
-        </label>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- NUKE FLASH LAYERS -->
-<div id="flash-red" class="nuke-flash"></div>
-<div id="flash-green" class="nuke-flash green"></div>
 
 <script>
-// Matrix Rain
-const c = document.getElementById('matrix');
-const ctx = c.getContext('2d');
-c.width = window.innerWidth; c.height = window.innerHeight;
-const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-const cols = c.width/14;
-const drops = Array(Math.floor(cols)).fill(1);
-function rain() {
-  ctx.fillStyle = 'rgba(0,0,0,0.05)';
-  ctx.fillRect(0,0,c.width,c.height);
-  ctx.fillStyle = '#39ff14';
-  ctx.font = '14px monospace';
+// Matrix rain (same as before)
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth; canvas.height = innerHeight;
+const chars = '0123456789ABCDEF';
+const drops = [];
+for(let i=0;i<innerWidth/15;i++) drops[i]=1;
+function rain(){
+  ctx.fillStyle='rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#39ff14'; ctx.font='15px monospace';
   for(let i=0;i<drops.length;i++){
-    const char = chars[Math.floor(Math.random()*chars.length)];
-    ctx.fillText(char, i*14, drops[i]*14);
-    if(drops[i]*14 > c.height && Math.random()>0.975) drops[i]=0;
+    const char=chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillText(char,i*15,drops[i]*15);
+    if(drops[i]*15>canvas.height&&Math.random()>0.975) drops[i]=0;
     drops[i]++;
   }
 }
-setInterval(rain, 35);
+setInterval(rain,35);
 
-// Combo lock: 16-12-13
-const combo = ["16","12","13"];
-const inputs = [document.getElementById('a'), document.getElementById('b'), document.getElementById('c')];
-const disp = document.getElementById('display');
-const msg = document.getElementById('msg');
+// Create 4 spinning wheels
+const container = document.getElementById('wheels');
+const status = document.getElementById('status');
+const correct = [1,3,3,7];
+let values = [0,0,0,0];
 
-inputs.forEach((inp, i) => {
-  inp.addEventListener('input', () => {
-    if(inp.value.length === 2 && i < 2) inputs[i+1].focus();
-    disp.textContent = inputs.map(x => x.value.padStart(2,'0') || '--').join(' - ');
-    if(inputs.every((x,j) => x.value === combo[j])) {
-      msg.style.color = '#39ff14';
-      msg.textContent = "VAULT BREACHED";
-      setTimeout(() => {
-        document.getElementById('vault').remove();
-        document.getElementById('app').style.display = 'block';
-      }, 2000);
-    }
-  });
+for(let i=0;i<4;i++){
+  const wheel = document.createElement('div');
+  wheel.className = 'wheel';
+  
+  const up = document.createElement('div');
+  up.className = 'arrow up';
+  up.innerHTML = '↑';
+  up.onclick = () => change(i,1);
+  
+  const down = document.createElement('div');
+  down.className = 'arrow down';
+  down.innerHTML = '↓';
+  down.onclick = () => change(i,-1);
+  
+  const nums = document.createElement('div');
+  nums.className = 'numbers';
+  nums.id = 'nums'+i;
+  
+  wheel.appendChild(up);
+  wheel.appendChild(down);
+  wheel.appendChild(nums);
+  container.appendChild(wheel);
+  
+  renderWheel(i);
+}
+
+function renderWheel(idx){
+  const el = document.getElementById('nums'+idx);
+  let html = '';
+  for(let n=0;n<10;n++){
+    const isCenter = n === values[idx];
+    const isAbove = n === (values[idx]+1)%10;
+    const isBelow = n === (values[idx]+9)%10;
+    let cls = isCenter ? 'highlight' : '';
+    let size = isCenter ? '80px' : (isAbove||isBelow)?'60px':'40px';
+    let opacity = isCenter ? 1 : (isAbove||isBelow)?0.6:0.2;
+    html += `<div class="number" style="font-size:${size};opacity:${opacity}">${n}</div>`;
+  }
+  el.innerHTML = html;
+  el.style.transform = `translateY(${ -values[idx] * 90 + 1350 }px)`;
+}
+
+function change(idx, dir){
+  values[idx] = (values[idx] + dir + 10) % 10;
+  renderWheel(idx);
+  
+  // Check combo
+  if(values.every((v,i)=>v===correct[i])){
+    status.style.color = '#39ff14';
+    status.textContent = 'VAULT BREACHED';
+    setTimeout(() => {
+      document.body.innerHTML = `
+        <div style="color:#39ff14;text-align:center;margin-top:30vh;font-size:5rem;">
+          ACCESS GRANTED<br><br>
+          <div style="font-size:2rem;margin-top:50px;">Welcome to GIRDER</div>
+        </div>`;
+      setTimeout(() => location.reload(), 4000); // or redirect to full app
+    }, 1500);
+  }
+}
+
+// Touch support for mobile
+document.querySelectorAll('.arrow').forEach(a=>{
+  a.addEventListener('touchstart', e=>{e.preventDefault(); a.click();});
 });
-
-// Tabs
-function tab(id) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelector(`nav button[onclick="tab('${id}')"]`).classList.add('active');
-}
-
-function flashAccess() {
-  const flash = document.createElement('div');
-  flash.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:black;z-index:99999;display:flex;align-items:center;justify-content:center;';
-  flash.innerHTML = '<h1 class="glitch" style="font-size:8rem;">ACCESS GRANTED</h1>';
-  document.body.appendChild(flash);
-  setTimeout(() => { flash.remove(); tab('search'); }, 3000);
-}
-
-// Debt clock
-let debt = 36412847291003;
-setInterval(() => {
-  debt += 1840000;
-  document.getElementById('debt').textContent = '$' + debt.toLocaleString();
-}, 1000);
-
-// NUKE PROTOCOL - INSANE FLASHING
-function nuke() {
-  if(!document.getElementById('nuke').checked) return;
-  
-  const red = document.getElementById('flash-red');
-  const green = document.getElementById('flash-green');
-  red.style.display = 'block';
-  green.style.display = 'block';
-  
-  const alerts = ["NUKE PROTOCOL ARMED","SELF-DESTRUCT INITIATED","5","4","3","2","1","GOODBYE"];
-  alerts.forEach((m,i) => setTimeout(() => alert(m), i*700));
-  
-  setTimeout(() => {
-    red.style.display = 'none';
-    green.style.display = 'none';
-    window.close() || window.open('','_self').close();
-  }, 8000);
-}
-
-// Search (Jeff Bezos + global targets)
-const targets = [
-  {name:"Jeffrey Preston Bezos",city:"Washington, D.C.",country:"USA",phone:"+1 (202) 555-0199",status:"PRIORITY TARGET"},
-  {name:"Elon Musk",city:"Austin",country:"USA",phone:"+1 (512) 555-0101",status:"MONITORED"},
-  {name:"Vladimir Putin",city:"Moscow",country:"Russia",phone:"+7 495 555-0123",status:"HOSTILE"},
-  {name:"Xi Jinping",city:"Beijing",country:"China",phone:"+86 10 5555-8888",status:"STRATEGIC"},
-  // ... (add more from previous versions)
-];
-
-function search() {
-  const q = document.getElementById('query').value.toLowerCase();
-  const person = q.includes("bezos") || q.includes("jeff") ? targets[0] : targets[Math.floor(Math.random()*targets.length)];
-  document.getElementById('data').innerHTML = `
-    <p><strong>SUBJECT:</strong> ${person.name}</p>
-    <p><strong>LOCATION:</strong> ${person.city}, ${person.country}</p>
-    <p><strong>PHONE:</strong> ${person.phone}</p>
-    <p><strong>STATUS:</strong> <span style="color:#ff0033">${person.status}</span></p>
-  `;
-  document.getElementById('result').style.display = 'block';
-}
-
-document.getElementById('query')?.addEventListener('keypress', e => e.key==='Enter' && search());
 </script>
 </body>
 </html>
