@@ -1,225 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GIRDER - General Information Research Device Engine Renderer</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --text: #c9d1d9;
-      --accent: #39ff14;
-      --red: #ff0033;
-      --border: #30363d;
-    }
-    body { margin:0; font-family:'Courier New',monospace; background:var(--bg); color:var(--text); overflow:hidden; height:100vh; }
-    #login-page { position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; }
-    .container { max-width:1200px; margin:0 auto; padding:20px; }
-    header { text-align:center; padding:40px 0; border-bottom:1px solid var(--border); }
-    .logo { font-size:3.5rem; font-weight:bold; color:var(--accent); text-shadow:0 0 20px var(--accent); letter-spacing:8px; }
-    .tagline { color:#8b949e; font-size:1.1rem; margin-top:10px; }
-    nav { display:flex; justify-content:center; gap:30px; margin:30px 0; flex-wrap:wrap; }
-    nav button { background:transparent; border:1px solid var(--accent); color:var(--accent); padding:12px 24px; cursor:pointer; transition:0.3s; }
-    nav button:hover, nav button.active { background:var(--accent); color:#000; }
-    .tab { display:none; }
-    .tab.active { display:block; }
-    .terminal { background:#000; border:1px solid var(--accent); padding:20px; border-radius:8px; box-shadow:0 0 30px rgba(57,255,20,0.3); margin:30px 0; }
-    input, button { font-family:inherit; padding:12px; margin:10px 0; background:#161b22; border:1px solid var(--border); color:var(--text); border-radius:4px; }
-    input { width:100%; max-width:500px; }
-    button:hover { background:#39ff14; box-shadow:0 0 20px #39ff14; transform:scale(1.05); }
-    .result, .debt, .config { margin-top:30px; padding:20px; background:#161b22; border:1px dashed var(--accent); }
-    .flash-screen { position:fixed; top:0; left:0; right:0; bottom:0; background:black; z-index:99999; display:flex; align-items:center; justify-content:center; flex-direction:column; display:none; }
-    .flash-text { font-size:4rem; color:var(--accent); animation:flash 1.5s infinite; text-shadow:0 0 40px var(--accent); }
-    @keyframes flash { 0%,100%{opacity:0.3} 50%{opacity:1} }
-    @keyframes glitch { 0%{text-shadow:4px 4px var(--red),-4px -4px var(--accent)} 50%{text-shadow:-4px -4px var(--red),4px 4px var(--accent)} }
-    .glitch { animation:glitch 1.8s infinite; }
-    .debt-number { font-size:3.5rem; color:var(--red); font-weight:bold; text-shadow:0 0 20px var(--red); }
-    .config-item { display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px dotted var(--border); }
-    .switch { position:relative; display:inline-block; width:70px; height:38px; }
-    .switch input { opacity:0; width:0; height:0; }
-    .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#333; transition:.4s; border-radius:34px; }
-    .slider:before { position:absolute; content:""; height:30px; width:30px; left:4px; bottom:4px; background:var(--bg); transition:.4s; border-radius:50%; }
-    input:checked + .slider { background:var(--accent); }
-    input:checked + .slider:before { transform:translateX(32px); }
-    .nuke-mode { --accent:#ff0033 !important; --text:#ff3366 !important; background:#220000 !important; transition:all 1s !important; }
-    .nuke-mode * { color:#ff3366 !important; border-color:#ff0033 !important; text-shadow:0 0 10px #ff0033 !important; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIRDER // VAULT SECURE</title>
+<style>
+  :root{--bg:#000;--accent:#39ff14;--red:#ff0033;--text:#c9d1d9;}
+  body,html{margin:0;overflow:hidden;height:100vh;background:#000;color:var(--accent);font-family:'Courier New',monospace;}
+  canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;opacity:0.15;}
+  .scanline{position:fixed;top:0;left:0;width:100%;height:5px;background:var(--accent);opacity:0.4;animation:scan 3s linear infinite;}
+  @keyframes scan{0%{transform:translateY(-10px)}100%{transform:translateY(100vh)}}
+  
+  /* VAULT LOCK */
+  #vault{position:fixed;top:0;left:0;width:100vw;height: |100vh;background:rgba(0,0,0,0.98);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+  .wheel{width:400px;height:400px;background:radial-gradient(#111,#000);border:12px ridge #222;border-radius:50%;position:relative;box-shadow:0 0 80px var(--accent);animation:spin 180s linear infinite;}
+  @keyframes spin{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
+  .center{width:140px;height:140px;background:#000;border:8px solid var(--accent);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 60px var(--accent);}
+  .center::after{content:"GIRDER";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;letter-spacing:10px;color:var(--accent);text-shadow:0 0 30px;}
+  .combo{font-size:50px;letter-spacing:25px;margin:40px 0;text-shadow:0 0 20px;}
+  .inputs{display:flex;gap:25px;}
+  .num{width:90px;height:90px;background:#111;border:4px solid #333;border-radius:15px;color:var(--accent);font-size:40px;text-align:center;transition:0.4s;box-shadow:0 0 20px rgba(0,0,0,0.8);}
+  .num:focus{border-color:var(--accent);box-shadow:0 0 40px var(--accent);outline:none;background:#001100;}
+  .glitch{animation:glitch 1.5s infinite;color:var(--accent);}
+  @keyframes glitch{0%,100%{text-shadow:3px 3px var(--red),-3px -3px var(--accent)}50%{text-shadow:-3px -3px var(--red),3px 3px var(--accent)}}
+  
+  /* MAIN APP */
+  #app{display:none;position:relative;z-index:10;}
+  .terminal{background:#000;border:2px solid var(--accent);padding:25px;border-radius:10px;margin:20px 0;box-shadow:0 0 50px rgba(57,255,20,0.6);}
+  .terminal::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(57,255,20,0.15),transparent);animation:shine 8s linear infinite;}
+  @keyframes shine{0%{left:-100%}100%{left:100%}}
+  nav button{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:15px 30px;margin:8px;cursor:pointer;transition:0.3s;border-radius:6px;}
+  nav button:hover,nav button.active{background:var(--accent);color:#000;transform:scale(1.15);box-shadow:0 0 30px var(--accent);}
+  .debt-number{font-size:4.5rem;color:var(--red);text-shadow:0 0 40px var(--red);animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:0.7}50%{opacity:1}}
+  
+  /* NUKE FLASHING CHAOS */
+  .nuke-flash{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;pointer-events:none;animation:flash 0.15s infinite;display:none;}
+  @keyframes flash{
+    0%,100%{background:#000000}
+    50%{background:#ff0033}
+  }
+  .nuke-flash.green{animation:flashgreen 0.12s infinite;}
+  @keyframes flashgreen{
+    0%,100%{background:#000000}
+    50%{background:#39ff14}
+  }
+</style>
 </head>
 <body>
 
-  <!-- LOCKED LOGIN SCREEN -->
-  <div id="login-page">
-    <div class="container">
-      <header>
-        <div class="logo glitch">GIRDER</div>
-        <p class="tagline">General Information Research Device Engine Renderer</p>
-        <p style="color:#ff0033;margin-top:30px;">CLASSIFIED ACCESS POINT // ECHELON LEVEL 5</p>
-      </header>
-      <div class="terminal">
-        <h2 style="color:var(--accent);text-align:center;">SECURE AUTHENTICATION REQUIRED</h2>
-        <form id="login-form">
-          <label>USERNAME:</label>
-          <input type="text" id="username" placeholder="Enter credentials..." autocomplete="off">
-          <label>PASSWORD:</label>
-          <input type="password" id="password" placeholder="••••••••••••" autocomplete="off">
-          <button type="submit">AUTHENTICATE</button>
-          <p id="login-error" style="color:#ff0033;display:none;">ACCESS DENIED: INVALID CREDENTIALS</p>
-        </form>
+<canvas id="matrix"></canvas>
+<div class="scanline"></div>
+
+<!-- COMBINATION VAULT (16-12-13) -->
+<div id="vault">
+  <div class="wheel"><div class="center"></div></div>
+  <h1 class="glitch">GIRDER VAULT</h1>
+  <p style="font-size:20px;opacity:0.7;">SECURE ACCESS POINT // 2025-2030</p>
+  <div class="combo" id="display">-- - -- - --</div>
+  <div class="inputs">
+    <input type="text" maxlength="2" class="num" id="a">
+    <input type="text" maxlength="2" class="num" id="b">
+    <input type="text" maxlength="2" class="num" id="c">
+  </div>
+  <p id="msg" style="margin-top:30px;color:#ff0033;height:30px;"></p>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="container" style="padding:20px;max-width:1300px;margin:0 auto;">
+  <h1 class="glitch" style="text-align:center;font-size:5rem;margin:40px 0;">GIRDER</h1>
+  <nav style="text-align:center;">
+    <button class="active" onclick="tab('blog')">Bulletin</button>
+    <button onclick="tab('search')">Subject Lookup</button>
+    <button onclick="tab('debt')">Debt Clock</button>
+    <button onclick="tab('config')">Configuration</button>
+  </nav>
+
+  <div id="blog" class="tab active">
+    <div class="terminal"><h2 style="color:var(--accent);">PANDORA PROTOCOL ACTIVE</h2><p>Global surveillance grid online. All targets indexed.</p>
+      <div style="text-align:center;margin:50px;"><button onclick="flashAccess()" style="font-size:2rem;padding:25px 60px;">ENTER TERMINAL</button></div>
+    </div>
+  </div>
+
+  <div id="search" class="tab">
+    <div class="terminal">
+      <h2>SUBJECT ACQUISITION</h2>
+      <input type="text" id="query" placeholder="ENTER TARGET..." style="width:100%;max-width:700px;padding:15px;font-size:18px;">
+      <button onclick="search()" style="padding:15px 40px;font-size:18px;margin-top:10px;">QUERY</button>
+      <div id="result" class="terminal" style="margin-top:30px;display:none;">
+        <h3 style="color:var(--accent);">CLASSIFIED DOSSIER</h3>
+        <div id="data"></div>
       </div>
     </div>
   </div>
 
-  <!-- MAIN APP (hidden until login) -->
-  <div id="app" class="container hidden">
-    <header>
-      <div class="logo glitch">GIRDER</div>
-      <p class="tagline">General Information Research Device Engine Renderer // v9.7.331</p>
-    </header>
-
-    <nav>
-      <button class="active" onclick="openTab('blog')">Bulletin</button>
-      <button onclick="openTab('search')">Subject Lookup</button>
-      <button onclick="openTab('debt')">USA Debt Clock</button>
-      <button onclick="openTab('config')">Configuration</button>
-    </nav>
-
-    <!-- TABS CONTENT -->
-    <div id="blog" class="tab active">
-      <div class="terminal blog-post">
-        <h1 style="color:var(--accent);">GIRDER v9.7 "PANDORA" Now Live</h1>
-        <p>Posted: 04 December 2025 // Author: SYSADMIN-07 (Clearance: BLACK)</p><br>
-        <p>Project PANDORA complete. Full spectrum dominance achieved.</p>
-        <div style="text-align:center;margin:40px 0;">
-          <button onclick="startFlashSequence()" style="font-size:1.5rem;padding:20px 40px;">Try It!</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="search" class="tab">
-      <div class="terminal">
-        <h2 style="color:var(--accent);">SUBJECT ACQUISITION TERMINAL</h2>
-        <input type="text" id="search-input" placeholder="Enter full name">
-        <button onclick="performSearch()">EXECUTE QUERY</button>
-      </div>
-      <div id="result" class="result hidden"><h3 style="color:var(--accent);">DOSSIER RETRIEVED</h3><div id="dossier-content"></div></div>
-    </div>
-
-    <div id="debt" class="tab">
-      <div class="terminal debt">
-        <h2 style="color:var(--red);text-align:center;">UNITED STATES NATIONAL DEBT</h2>
-        <div style="text-align:center;margin:40px 0;">
-          <div class="debt-number" id="debt-counter">$36,412,847,291,003</div>
-          <p>Increasing by <span style="color:var(--red);font-size:1.5rem;">$1.84 million</span> / minute</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="config" class="tab">
-      <div class="terminal config">
-        <h2 style="color:var(--accent);">SYSTEM CONFIGURATION // ROOT LEVEL</h2>
-        <div class="config-item"><span>Enable PRISM Full-Take</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="config-item"><span>Allow MUSCULAR Intercept</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="config-item"><span>SS7 Location Spoofing</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-        <div class="config-item"><span>Zero-Day Auto-Deploy</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="config-item"><span>Delete Logs After Query</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-        <div class="config-item" style="color:var(--red);font-weight:bold;">
-          <span>NUKE Protocol Armed</span>
-          <label class="switch"><input type="checkbox" id="nuke-switch" onchange="activateNuke()"><span class="slider"></span></label>
-        </div>
-      </div>
+  <div id="debt" class="tab">
+    <div class="terminal" style="text-align:center;">
+      <h2 style="color:var(--red);">U.S. NATIONAL DEBT // LIVE</h2>
+      <div class="debt-number" id="debt">$36,412,847,291,003</div>
+      <p style="font-size:24px;color:var(--red);margin:20px;">+ $1.84 MILLION PER MINUTE</p>
     </div>
   </div>
 
-  <!-- FLASH & NUKE SCREENS -->
-  <div id="flash-screen" class="flash-screen">
-    <div class="flash-text glitch">ACCESS GRANTED</div>
+  <div id="config" class="tab">
+    <div class="terminal">
+      <h2 style="color:var(--accent);">ROOT COMMAND INTERFACE</h2>
+      <div style="padding:15px 0;border-bottom:1px dotted #333;"><span>PRISM Full-Take</span><span style="float:right;color:var(--accent);">● ACTIVE</span></div>
+      <div style="padding:15px 0;border-bottom:1px dotted #333;"><span>MUSCULAR Intercept</span><span style="float:right;color:var(--accent);">● ACTIVE</span></div>
+      <div style="padding:20px 0;color:var(--red);font-weight:bold;font-size:20px;">
+        <span>NUKE PROTOCOL</span>
+        <label style="float:right;">
+          <input type="checkbox" id="nuke" onchange="nuke()"> ARM
+        </label>
+      </div>
+    </div>
   </div>
+</div>
 
-  <script>
-    const correctUser = "AVASQUEZ";
-    const correctPass = "mexicancartel";
+<!-- NUKE FLASH LAYERS -->
+<div id="flash-red" class="nuke-flash"></div>
+<div id="flash-green" class="nuke-flash green"></div>
 
-    document.getElementById('login-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const user = document.getElementById('username').value.trim();
-      const pass = document.getElementById('password').value;
+<script>
+// Matrix Rain
+const c = document.getElementById('matrix');
+const ctx = c.getContext('2d');
+c.width = window.innerWidth; c.height = window.innerHeight;
+const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+const cols = c.width/14;
+const drops = Array(Math.floor(cols)).fill(1);
+function rain() {
+  ctx.fillStyle = 'rgba(0,0,0,0.05)';
+  ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle = '#39ff14';
+  ctx.font = '14px monospace';
+  for(let i=0;i<drops.length;i++){
+    const char = chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillText(char, i*14, drops[i]*14);
+    if(drops[i]*14 > c.height && Math.random()>0.975) drops[i]=0;
+    drops[i]++;
+  }
+}
+setInterval(rain, 35);
 
-      // BACKDOOR
-      if (user.toLowerCase() === "i own the cia") {
-        document.body.innerHTML = "<h1 style='color:#39ff14;text-align:center;margin-top:20%'>YOU WIN.</h1>";
-        setTimeout(() => location.reload(), 3000);
-        return;
-      }
+// Combo lock: 16-12-13
+const combo = ["16","12","13"];
+const inputs = [document.getElementById('a'), document.getElementById('b'), document.getElementById('c')];
+const disp = document.getElementById('display');
+const msg = document.getElementById('msg');
 
-      if (user === correctUser && pass === correctPass) {
-        document.getElementById('login-page').style.display = 'none';
-        document.getElementById('app').classList.remove('hidden');
-        document.body.style.overflow = 'auto';
-      } else {
-        document.getElementById('login-error').style.display = 'block';
-      }
-    });
-
-    function openTab(name) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-      document.getElementById(name).classList.add('active');
-      document.querySelector(`nav button[onclick="openTab('${name}')"]`).classList.add('active');
-    }
-
-    function startFlashSequence() {
-      document.getElementById('flash-screen').style.display = 'flex';
+inputs.forEach((inp, i) => {
+  inp.addEventListener('input', () => {
+    if(inp.value.length === 2 && i < 2) inputs[i+1].focus();
+    disp.textContent = inputs.map(x => x.value.padStart(2,'0') || '--').join(' - ');
+    if(inputs.every((x,j) => x.value === combo[j])) {
+      msg.style.color = '#39ff14';
+      msg.textContent = "VAULT BREACHED";
       setTimeout(() => {
-        document.getElementById('flash-screen').style.display = 'none';
-        openTab('search');
-      }, 3000);
+        document.getElementById('vault').remove();
+        document.getElementById('app').style.display = 'block';
+      }, 2000);
     }
+  });
+});
 
-    // Debt counter
-    let debt = 36412847291003;
-    setInterval(() => {
-      debt += 1840000;
-      document.getElementById('debt-counter').textContent = '$' + debt.toLocaleString();
-    }, 1000);
+// Tabs
+function tab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`nav button[onclick="tab('${id}')"]`).classList.add('active');
+}
 
-    // NUKE PROTOCOL
-    function activateNuke() {
-      if (!document.getElementById('nuke-switch').checked) return;
+function flashAccess() {
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:black;z-index:99999;display:flex;align-items:center;justify-content:center;';
+  flash.innerHTML = '<h1 class="glitch" style="font-size:8rem;">ACCESS GRANTED</h1>';
+  document.body.appendChild(flash);
+  setTimeout(() => { flash.remove(); tab('search'); }, 3000);
+}
 
-      document.body.classList.add('nuke-mode');
-      setTimeout(() => alert("WARNING: NUKE PROTOCOL ACTIVATED"), 500);
-      setTimeout(() => alert("SELF-DESTRUCT SEQUENCE INITIATED"), 1500);
-      setTimeout(() => alert("ALL DATA WILL BE PURGED"), 2500);
-      setTimeout(() => alert("GOODBYE."), 3500);
-      setTimeout(() => window.close() || window.open('','_self').close(), 4500);
-    }
+// Debt clock
+let debt = 36412847291003;
+setInterval(() => {
+  debt += 1840000;
+  document.getElementById('debt').textContent = '$' + debt.toLocaleString();
+}, 1000);
 
-    // Search (Jeff Bezos still works)
-    const fakeFirstNames = ["Michael","Sarah","David","Emma","James","Olivia","Robert","Sophia","William","Isabella"];
-    const fakeLastNames = ["Smith","Johnson","Brown","Davis","Miller","Wilson","Moore","Taylor","Anderson","Clark"];
+// NUKE PROTOCOL - INSANE FLASHING
+function nuke() {
+  if(!document.getElementById('nuke').checked) return;
+  
+  const red = document.getElementById('flash-red');
+  const green = document.getElementById('flash-green');
+  red.style.display = 'block';
+  green.style.display = 'block';
+  
+  const alerts = ["NUKE PROTOCOL ARMED","SELF-DESTRUCT INITIATED","5","4","3","2","1","GOODBYE"];
+  alerts.forEach((m,i) => setTimeout(() => alert(m), i*700));
+  
+  setTimeout(() => {
+    red.style.display = 'none';
+    green.style.display = 'none';
+    window.close() || window.open('','_self').close();
+  }, 8000);
+}
 
-    function performSearch() {
-      const query = document.getElementById('search-input').value.trim().toLowerCase();
-      const content = document.getElementById('dossier-content');
-      if (!query) return;
+// Search (Jeff Bezos + global targets)
+const targets = [
+  {name:"Jeffrey Preston Bezos",city:"Washington, D.C.",country:"USA",phone:"+1 (202) 555-0199",status:"PRIORITY TARGET"},
+  {name:"Elon Musk",city:"Austin",country:"USA",phone:"+1 (512) 555-0101",status:"MONITORED"},
+  {name:"Vladimir Putin",city:"Moscow",country:"Russia",phone:"+7 495 555-0123",status:"HOSTILE"},
+  {name:"Xi Jinping",city:"Beijing",country:"China",phone:"+86 10 5555-8888",status:"STRATEGIC"},
+  // ... (add more from previous versions)
+];
 
-      let data = {};
-      if (query.includes("jeff") && query.includes("bezos") || query === "bezos") {
-        data = {name:"Jeffrey Preston Bezos", phone:"(202) 555-0199", email:"jbezos@amazon.com", city:"Washington, D.C.", job:"Founder, Amazon", status:"MONITORED - PRIORITY TARGET"};
-      } else {
-        data = {
-          name: fakeFirstNames[Math.floor(Math.random()*10)] + " " + fakeLastNames[Math.floor(Math.random()*10)],
-          phone: "(" + Math.floor(200+Math.random()*800) + ") " + Math.floor(100+Math.random()*900) + "-" + Math.floor(1000+Math.random()*9000),
-          email: "redacted@" + ["protonmail.com","tutanota.com","gmail.com"][Math.floor(Math.random()*3)],
-          city: "CLASSIFIED", job: "UNKNOWN", status: "WATCHLISTED"
-        };
-      }
+function search() {
+  const q = document.getElementById('query').value.toLowerCase();
+  const person = q.includes("bezos") || q.includes("jeff") ? targets[0] : targets[Math.floor(Math.random()*targets.length)];
+  document.getElementById('data').innerHTML = `
+    <p><strong>SUBJECT:</strong> ${person.name}</p>
+    <p><strong>LOCATION:</strong> ${person.city}, ${person.country}</p>
+    <p><strong>PHONE:</strong> ${person.phone}</p>
+    <p><strong>STATUS:</strong> <span style="color:#ff0033">${person.status}</span></p>
+  `;
+  document.getElementById('result').style.display = 'block';
+}
 
-      content.innerHTML = `<p><strong>SUBJECT:</strong> ${data.name}</p><p><strong>THREAT:</strong> <span style="color:#ff0033">${data.status}</span></p><p><strong>PHONE:</strong> ${data.phone}</p><p><strong>EMAIL:</strong> ${data.email}</p>`;
-      document.getElementById('result').classList.remove('hidden');
-    }
-
-    document.getElementById('search-input')?.addEventListener('keypress', e => { if (e.key === 'Enter') performSearch(); });
-  </script>
+document.getElementById('query')?.addEventListener('keypress', e => e.key==='Enter' && search());
+</script>
 </body>
 </html>
