@@ -12,112 +12,34 @@
       --red: #ff0033;
       --border: #30363d;
     }
-    body {
-      margin: 0;
-      font-family: 'Courier New', monospace;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    header {
-      text-align: center;
-      padding: 40px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .logo {
-      font-size: 3.5rem;
-      font-weight: bold;
-      color: var(--accent);
-      text-shadow: 0 0 20px var(--accent);
-      letter-spacing: 8px;
-    }
-    .tagline {
-      color: #8b949e;
-      font-size: 1.1rem;
-      margin-top: 10px;
-    }
-    .terminal {
-      background: #000;
-      border: 1px solid var(--accent);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
-      margin: 30px 0;
-    }
-    input, button {
-      font-family: inherit;
-      padding: 12px;
-      margin: 10px 0;
-      background: #161b22;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 4px;
-    }
-    input { width: 100%; max-width: 500px; }
-    button {
-      background: var(--accent);
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: none;
-    }
-    button:hover {
-      background: #39ff14;
-      box-shadow: 0 0 20px #39ff14;
-      transform: scale(1.05);
-    }
-    .result {
-      margin-top: 30px;
-      padding: 20px;
-      background: #161b22;
-      border: 1px dashed var(--accent);
-      display: none;
-    }
-    .flash-screen {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: black;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      display: none;
-    }
-    .flash-text {
-      font-size: 4rem;
-      color: var(--accent);
-      animation: flash 1.5s infinite;
-      text-shadow: 0 0 40px var(--accent);
-    }
-    @keyframes flash {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
-    }
-    .blog-post {
-      background: #161b22;
-      padding: 30px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      margin: 40px 0;
-    }
-    .date { color: #8b949e; font-size: 0.9rem; }
-    .hidden { display: none; }
-    .glitch {
-      animation: glitch 2s infinite;
-    }
-    @keyframes glitch {
-      0% { text-shadow: 2px 2px var(--red), -2px -2px var(--accent); }
-      50% { text-shadow: -2px -2px var(--red), 2px 2px var(--accent); }
-      100% { text-shadow: 2px 2px var(--red), -2px -2px var(--accent); }
-    }
+    body { margin:0; font-family:'Courier New',monospace; background:var(--bg); color:var(--text); overflow-x:hidden; }
+    .container { max-width:1200px; margin:0 auto; padding:20px; }
+    header { text-align:center; padding:40px 0; border-bottom:1px solid var(--border); }
+    .logo { font-size:3.5rem; font-weight:bold; color:var(--accent); text-shadow:0 0 20px var(--accent); letter-spacing:8px; }
+    .tagline { color:#8b949e; font-size:1.1rem; margin-top:10px; }
+    nav { display:flex; justify-content:center; gap:30px; margin:30px 0; flex-wrap:wrap; }
+    nav button { background:transparent; border:1px solid var(--accent); color:var(--accent); padding:12px 24px; cursor:pointer; transition:0.3s; }
+    nav button:hover, nav button.active { background:var(--accent); color:#000; }
+    .tab { display:none; }
+    .tab.active { display:block; }
+    .terminal { background:#000; border:1px solid var(--accent); padding:20px; border-radius:8px; box-shadow:0 0 30px rgba(57,255,20,0.3); margin:30px 0; }
+    input, button { font-family:inherit; padding:12px; margin:10px 0; background:#161b22; border:1px solid var(--border); color:var(--text); border-radius:4px; }
+    input { width:100%; max-width:500px; }
+    button:hover { background:#39ff14; box-shadow:0 0 20px #39ff14; transform:scale(1.05); }
+    .result, .debt, .config { margin-top:30px; padding:20px; background:#161b22; border:1px dashed var(--accent); }
+    .flash-screen { position:fixed; top:0; left:0; right:0; bottom:0; background:black; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; display:none; }
+    .flash-text { font-size:4rem; color:var(--accent); animation:flash 1.5s infinite; text-shadow:0 0 40px var(--accent); }
+    @keyframes flash { 0%,100%{opacity:0.3} 50%{opacity:1} }
+    @keyframes glitch { 0%{text-shadow:2px 2px var(--red),-2px -2px var(--accent)} 50%{text-shadow:-2px -2px var(--red),2px 2px var(--accent)} 100%{text-shadow:2px 2px var(--red),-2px -2px var(--accent)} }
+    .glitch { animation:glitch 2s infinite; }
+    .debt-number { font-size:3.5rem; color:var(--red); font-weight:bold; text-shadow:0 0 20px var(--red); }
+    .config-item { display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px dotted var(--border); }
+    .switch { position:relative; display:inline-block; width:60px; height:34px; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#333; transition:.4s; border-radius:34px; }
+    .slider:before { position:absolute; content:""; height:26px; width:26px; left:4px; bottom:4px; background:var(--bg); transition:.4s; border-radius:50%; }
+    input:checked + .slider { background:var(--accent); }
+    input:checked + .slider:before { transform:translateX(26px); }
   </style>
 </head>
 <body>
@@ -126,161 +48,160 @@
   <div id="login-page" class="container">
     <header>
       <div class="logo glitch">CIA Database</div>
-      <p class="tagline">General Information Research Device Engine Renderer</p>
-      <p style="color:#ff0033; margin-top:30px;">CLASSIFIED ACCESS POINT // ECHELON LEVEL 5</p>
+      <p class="tagline">Central Intelligence Agency</p>
+      <p style="color:#ff0033;margin-top:30px;">CLASSIFIED ACCESS POINT // ECHELON LEVEL 5</p>
     </header>
-
     <div class="terminal">
-      <h2 style="color:var(--accent); text-align:center;">SECURE AUTHENTICATION REQUIRED</h2>
+      <h2 style="color:var(--accent);text-align:center;">SECURE AUTHENTICATION REQUIRED</h2>
       <form id="login-form">
         <label>USERNAME:</label>
         <input type="text" id="username" placeholder="Enter credentials..." autocomplete="off">
         <label>PASSWORD:</label>
         <input type="password" id="password" placeholder="••••••••••••" autocomplete="off">
         <button type="submit">AUTHENTICATE</button>
-        <p id="login-error" style="color:#ff0033; display:none;">ACCESS DENIED: INVALID CREDENTIALS</p>
+        <p id="login-error" style="color:#ff0033;display:none;">ACCESS DENIED: INVALID CREDENTIALS</p>
       </form>
     </div>
   </div>
 
-  <!-- MAIN APP (hidden until login) -->
-  <div id="app" class="hidden">
-    <!-- BLOG PAGE -->
-    <div id="blog-page" class="container">
-      <header>
-        <div class="logo">GIRDER</div>
-        <p class="tagline">Internal Bulletin // 2025-12-04</p>
-      </header>
+  <!-- MAIN APP -->
+  <div id="app" class="container hidden">
+    <header>
+      <div class="logo glitch">GIRDER</div>
+      <p class="tagline">General Information Research Device Engine Renderer // v9.7.331</p>
+    </header>
 
-      <div class="blog-post">
-        <h1 style="color:var(--accent);">GIRDER v9.78 "PANDORA" Now Live</h1>
-        <p class="date">Posted: 04 December 2025 // Author: SYSADMIN-07 (Clearance: BLACK)</p>
-        <br>
+    <nav>
+      <button class="active" onclick="openTab('blog')">Bulletin</button>
+      <button onclick="openTab('search')">Subject Lookup</button>
+      <button onclick="openTab('debt')">USA Debt Clock</button>
+      <button onclick="openTab('config')">Configuration</button>
+    </nav>
+
+    <!-- BLOG -->
+    <div id="blog" class="tab active">
+      <div class="terminal blog-post">
+        <h1 style="color:var(--accent);">GIRDER v9.7 "PANDORA" Now Live</h1>
+        <p class="date">Posted: 04 December 2025 // Author: SYSADMIN-07 (Clearance: BLACK)</p><br>
         <p>Field operatives and analysts,</p>
         <p>After 18 months of covert development under Project PANDORA, we are proud to announce the full deployment of <strong>GIRDER v9.7</strong> — the most powerful signals intelligence aggregation platform ever fielded by the Agency.</p>
-        <p>The new <strong>General Information Research Device Engine Renderer (GIRDER)</strong> now provides real-time, zero-hop access to consolidated profiles from over 400 domestic and foreign data partners, including previously firewalled NSA PRISM feeds, Five Eyes contributor networks, and select commercial dark pools.</p>
-        <p>Key new capabilities:</p>
-        <ul style="color:#39ff14;">
-          <li>Instant biometric cross-match against 3.2 billion indexed faces</li>
-          <li>Live geolocation triangulation via cellular IMSI and SS7 exploits</li>
-          <li>Full financial graph mapping (including crypto wallets)</li>
-          <li>Real-time social graph with sentiment scoring</li>
-          <li>Direct private-line telephone numbers and burner recovery</li>
-        </ul>
-        <p>This is not a drill. GIRDER is now active across all black sites and SCIFs worldwide.</p>
-        <br>
-        <div style="text-align:center; margin:40px 0;">
-          <button onclick="startFlashSequence()" style="font-size:1.5rem; padding:20px 40px;">Try It!</button>
+        <p>New tabs added: live U.S. Debt tracking and full system configuration override.</p>
+        <div style="text-align:center;margin:40px 0;">
+          <button onclick="startFlashSequence()" style="font-size:1.5rem;padding:20px 40px;">Try It!</button>
         </div>
       </div>
     </div>
 
-    <!-- SEARCH PAGE -->
-    <div id="search-page" class="container hidden">
-      <header>
-        <div class="logo glitch">GIRDER</div>
-        <p class="tagline">Subject Lookup Interface // v9.7.331</p>
-      </header>
-
+    <!-- SEARCH -->
+    <div id="search" class="tab">
       <div class="terminal">
         <h2 style="color:var(--accent);">SUBJECT ACQUISITION TERMINAL</h2>
         <input type="text" id="search-input" placeholder="Enter full name (e.g. John Doe)" autocomplete="off">
         <button onclick="performSearch()">EXECUTE QUERY</button>
       </div>
+      <div id="result" class="result"><h3 style="color:var(--accent);">DOSSIER RETRIEVED</h3><div id="dossier-content"></div></div>
+    </div>
 
-      <div id="result" class="result">
-        <h3 style="color:var(--accent);">DOSSIER RETRIEVED</h3>
-        <div id="dossier-content"></div>
+    <!-- USA DEBT CLOCK -->
+    <div id="debt" class="tab">
+      <div class="terminal debt">
+        <h2 style="color:var(--red);text-align:center;">UNITED STATES NATIONAL DEBT // REAL-TIME</h2>
+        <div style="text-align:center;margin:40px 0;">
+          <div class="debt-number" id="debt-counter">$36,412,847,291,003</div>
+          <p>Increasing by <span style="color:var(--red);font-size:1.5rem;">$1.84 million</span> every minute</p>
+        </div>
+        <p style="color:#ff0033;text-align:center;">DEBT-TO-GDP RATIO: 137.4% — UNSUSTAINABLE</p>
+      </div>
+    </div>
+
+    <!-- CONFIGURATION -->
+    <div id="config" class="tab">
+      <div class="terminal config">
+        <h2 style="color:var(--accent);">SYSTEM CONFIGURATION // ROOT LEVEL</h2>
+        <div class="config-item"><span>Enable PRISM Full-Take</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="config-item"><span>Allow MUSCULAR Intercept</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="config-item"><span>SS7 Location Spoofing</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="config-item"><span>Zero-Day Auto-Deploy</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="config-item"><span>Delete Logs After Query</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="config-item"><span style="color:var(--red);">NUKE Protocol Armed</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
       </div>
     </div>
   </div>
 
-  <!-- FLASH TRANSITION SCREEN -->
+  <!-- FLASH SCREEN -->
   <div id="flash-screen" class="flash-screen">
     <div class="flash-text glitch">ACCESS GRANTED</div>
-    <div class="flash-text" style="font-size:2rem; animation-delay:0.5s;">GIRDER ONLINE</div>
+    <div class="flash-text" style="font-size:2rem;animation-delay:0.5s;">GIRDER ONLINE</div>
   </div>
 
   <script>
     // Login
-    document.getElementById('login-form').addEventListener('submit', function(e) {
+    document.getElementById('login-form').addEventListener('submit', e => {
       e.preventDefault();
-      const user = document.getElementById('username').value.trim();
-      const pass = document.getElementById('password').value;
-      
-      if (user === 'AVASQUEZ' && pass === 'mexicancartel') {
+      if (document.getElementById('username').value.trim() === 'AVASQUEZ' && document.getElementById('password').value === 'mexicancartel') {
         document.getElementById('login-page').classList.add('hidden');
         document.getElementById('app').classList.remove('hidden');
-        document.getElementById('blog-page').classList.remove('hidden');
       } else {
         document.getElementById('login-error').style.display = 'block';
       }
     });
 
-    // Flash effect then go to search
+    // Tab system
+    function openTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      document.querySelector(`nav button[onclick="openTab('${tabName}')"]`).classList.add('active');
+      if (tabName === 'search') document.getElementById('search').classList.remove('hidden');
+    }
+
+    // Flash → Search
     function startFlashSequence() {
       document.getElementById('flash-screen').style.display = 'flex';
       setTimeout(() => {
-        document.getElementById('blog-page').classList.add('hidden');
-        document.getElementById('search-page').classList.remove('hidden');
         document.getElementById('flash-screen').style.display = 'none';
+        openTab('search');
       }, 3000);
     }
 
-    // Fake data generator
-    const fakeFirstNames = ["Michael", "Sarah", "David", "Emma", "James", "Olivia", "Robert", "Sophia", "William", "Isabella"];
-    const fakeLastNames = ["Smith", "Johnson", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson", "Clark"];
-    const fakeCities = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Miami", "Seattle", "Denver", "Boston", "Austin"];
-    const fakeJobs = ["Software Engineer", "Financial Analyst", "Marketing Director", "Surgeon", "Journalist", "Teacher", "Lawyer", "Entrepreneur", "Chef", "Pilot"];
+    // Debt counter (increases in real time)
+    let debt = 36412847291003;
+    setInterval(() => {
+      debt += 1840000; // ~$1.84M per minute (realistic)
+      document.getElementById('debt-counter').textContent = '$' + debt.toLocaleString();
+    }, 1000);
 
-    function generatePhone() {
-      return "(" + Math.floor(200 + Math.random()*800) + ") " + Math.floor(100 + Math.random()*900) + "-" + Math.floor(1000 + Math.random()*9000);
-    }
+    // Search logic (Jeff Bezos special case unchanged)
+    const fakeFirstNames = ["Michael","Sarah","David","Emma","James","Olivia","Robert","Sophia","William","Isabella"];
+    const fakeLastNames = ["Smith","Johnson","Brown","Davis","Miller","Wilson","Moore","Taylor","Anderson","Clark"];
+    const fakeCities = ["New York","Los Angeles","Chicago","Houston","Phoenix","Miami","Seattle","Denver","Boston","Austin"];
+    const fakeJobs = ["Software Engineer","Financial Analyst","Marketing Director","Surgeon","Journalist","Teacher","Lawyer","Entrepreneur","Chef","Pilot"];
+
+    function generatePhone() { return "(" + Math.floor(200+Math.random()*800) + ") " + Math.floor(100+Math.random()*900) + "-" + Math.floor(1000+Math.random()*9000); }
 
     function performSearch() {
       const query = document.getElementById('search-input').value.trim().toLowerCase();
-      const resultDiv = document.getElementById('result');
       const content = document.getElementById('dossier-content');
-
       if (!query) return;
 
       let name, phone, email, city, job, status;
 
-      if (query === "jeff bezos" || query === "bezos" || query === "jeffrey bezos") {
-        name = "Jeffrey Preston Bezos";
-        phone = "(202) 555-0199";
-        email = "jbezos@amazon.com";
-        city = "Washington, D.C.";
-        job = "Founder & Executive Chairman, Amazon";
-        status = "MONITORED - PRIORITY TARGET (ECHELON)";
+      if (query.includes("jeff") && query.includes("bezos") || query === "bezos") {
+        name = "Jeffrey Preston Bezos"; phone = "(202) 555-0199"; email = "jbezos@amazon.com"; city = "Washington, D.C."; job = "Founder & Executive Chairman, Amazon"; status = "MONITORED - PRIORITY TARGET (ECHELON)";
       } else {
-        name = fakeFirstNames[Math.floor(Math.random()*fakeFirstNames.length)] + " " + fakeLastNames[Math.floor(Math.random()*fakeLastNames.length)];
+        name = fakeFirstNames[Math.floor(Math.random()*10)] + " " + fakeLastNames[Math.floor(Math.random()*10)];
         phone = generatePhone();
         email = name.toLowerCase().replace(" ", ".") + "@" + ["gmail.com","yahoo.com","outlook.com","protonmail.com","aol.com"][Math.floor(Math.random()*5)];
-        city = fakeCities[Math.floor(Math.random()*fakeCities.length)];
-        job = fakeJobs[Math.floor(Math.random()*fakeJobs.length)];
-        status = ["LOW THREAT", "PERSON OF INTEREST", "WATCHLISTED", "CLEARED", "ASSET"][Math.floor(Math.random()*5)];
+        city = fakeCities[Math.floor(Math.random()*10)];
+        job = fakeJobs[Math.floor(Math.random()*10)];
+        status = ["LOW THREAT","PERSON OF INTEREST","WATCHLISTED","CLEARED","ASSET"][Math.floor(Math.random()*5)];
       }
 
-      content.innerHTML = `
-        <p><strong>SUBJECT:</strong> ${name}</p>
-        <p><strong>THREAT LEVEL:</strong> <span style="color:${status.includes("PRIORITY") ? 'var(--red)' : 'var(--accent)'}">${status}</span></p>
-        <p><strong>LOCATION:</strong> ${city}, United States</p>
-        <p><strong>OCCUPATION:</strong> ${job}</p>
-        <p><strong>PRIMARY PHONE:</strong> ${phone}</p>
-        <p><strong>PRIMARY EMAIL:</strong> ${email}</p>
-        <p><strong>LAST SEEN:</strong> ${Math.floor(Math.random()*20)} hours ago</p>
-        <p style="color:#ff0033; margin-top:20px;"><em>WARNING: This record is CLASSIFIED. Unauthorized distribution is punishable under 18 U.S.C. § 793.</em></p>
-      `;
-
-      resultDiv.style.display = 'block';
-      resultDiv.scrollIntoView({ behavior: 'smooth' });
+      content.innerHTML = `<p><strong>SUBJECT:</strong> ${name}</p><p><strong>THREAT LEVEL:</strong> <span style="color:${status.includes("PRIORITY")?'var(--red)':'var(--accent)'}">${status}</span></p><p><strong>LOCATION:</strong> ${city}</p><p><strong>OCCUPATION:</strong> ${job}</p><p><strong>PRIMARY PHONE:</strong> ${phone}</p><p><strong>PRIMARY EMAIL:</strong> ${email}</p><p style="color:#ff0033;margin-top:20px;"><em>CLASSIFIED — 18 U.S.C. § 793</em></p>`;
+      document.getElementById('result').style.display = 'block';
     }
 
-    // Allow Enter key in search
-    document.getElementById('search-input')?.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') performSearch();
-    });
+    document.getElementById('search-input')?.addEventListener('keypress', e => { if (e.key === 'Enter') performSearch(); });
   </script>
 </body>
 </html>
