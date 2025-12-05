@@ -1,131 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GIRDER // 1337</title>
-<style>
-  body,html{margin:0;height:100vh;background:#000;overflow:hidden;color:#39ff14;font-family:'Courier New',monospace;display:flex;align-items:center;justify-content:center;flex-direction:column;}
-  canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;opacity:0.12;}
-  
-  .lock{background:#000;border:20px solid #111;border-radius:30px;padding:40px 30px;box-shadow:0 0 80px #39ff14, inset 0 0 60px #000;position:relative;}
-  .title{font-size:4rem;margin-bottom:30px;letter-spacing:12px;text-shadow:0 0 30px #39ff14;animation:glitch 2s infinite;}
-  @keyframes glitch{0%,100%{text-shadow:3px 0 #ff0033,-3px 0 #39ff14}50%{text-shadow:-3px 0 #ff0033,3px 0 #39ff14}}
-  
-  .wheels{display:flex;gap:20px;}
-  .wheel{position:relative;width:90px;height:360px;background:#000;border:6px solid #222;border-radius:15px;overflow:hidden;box-shadow:inset 0 0 40px #000, 0 0 30px #39ff14;}
-  .numbers{position:absolute;width:100%;text-align:center;font-size:64px;line-height:90px;user-select:none;transition:transform 0s;}
-  .number{color:#39ff14;text-shadow:0 0 20px;}
-  .highlight{color:#39ff14;text-shadow:0 0 40px #39ff14;font-size:80px !important;line-height:90px !important;}
-  
-  .arrow{cursor:pointer;position:absolute;left:50%;transform:translateX(-50%);background:rgba(0,255,20,0.1);width:100%;height:50px;display:flex;align-items:center;justify-content:center;font-size:50px;z-index:10;}
-  .up{top:0;}
-  .down{bottom:0;}
-  
-  .status{margin-top:40px;font-size:28px;min-height:50px;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIA Database</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --text: #c9d1d9;
+      --accent: #39ff14;
+      --red: #ff0033;
+      --border: #30363d;
+    }
+    body { margin:0; font-family:'Courier New',monospace; background:var(--bg); color:var(--text); overflow:hidden; height:100vh; }
+    #login-page { position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; }
+    .container { max-width:1200px; margin:0 auto; padding:20px; }
+    header { text-align:center; padding:40px 0; border-bottom:1px solid var(--border); }
+    .logo { font-size:3.5rem; font-weight:bold; color:var(--accent); text-shadow:0 0 20px var(--accent); letter-spacing:8px; }
+    .tagline { color:#8b949e; font-size:1.1rem; margin-top:10px; }
+    nav { display:flex; justify-content:center; gap:30px; margin:30px 0; flex-wrap:wrap; }
+    nav button { background:transparent; border:1px solid var(--accent); color:var(--accent); padding:12px 24px; cursor:pointer; transition:0.3s; }
+    nav button:hover, nav button.active { background:var(--accent); color:#000; }
+    .tab { display:none; }
+    .tab.active { display:block; }
+    .terminal { background:#000; border:1px solid var(--accent); padding:20px; border-radius:8px; box-shadow:0 0 30px rgba(57,255,20,0.3); margin:30px 0; }
+    input, button { font-family:inherit; padding:12px; margin:10px 0; background:#161b22; border:1px solid var(--border); color:var(--text); border-radius:4px; }
+    input { width:100%; max-width:500px; }
+    button:hover { background:#39ff14; box-shadow:0 0 20px #39ff14; transform:scale(1.05); }
+    .result, .debt, .config { margin-top:30px; padding:20px; background:#161b22; border:1px dashed var(--accent); }
+    .flash-screen { position:fixed; top:0; left:0; right:0; bottom:0; background:black; z-index:99999; display:flex; align-items:center; justify-content:center; flex-direction:column; display:none; }
+    .flash-text { font-size:4rem; color:var(--accent); animation:flash 1.5s infinite; text-shadow:0 0 40px var(--accent); }
+    @keyframes flash { 0%,100%{opacity:0.3} 50%{opacity:1} }
+    @keyframes glitch { 0%{text-shadow:4px 4px var(--red),-4px -4px var(--accent)} 50%{text-shadow:-4px -4px var(--red),4px 4px var(--accent)} }
+    .glitch { animation:glitch 1.8s infinite; }
+    .debt-number { font-size:3.5rem; color:var(--red); font-weight:bold; text-shadow:0 0 20px var(--red); }
+    .config-item { display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px dotted var(--border); }
+    .switch { position:relative; display:inline-block; width:70px; height:38px; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#333; transition:.4s; border-radius:34px; }
+    .slider:before { position:absolute; content:""; height:30px; width:30px; left:4px; bottom:4px; background:var(--bg); transition:.4s; border-radius:50%; }
+    input:checked + .slider { background:var(--accent); }
+    input:checked + .slider:before { transform:translateX(32px); }
+    .nuke-mode { --accent:#ff0033 !important; --text:#ff3366 !important; background:#220000 !important; transition:all 1s !important; }
+    .nuke-mode * { color:#ff3366 !important; border-color:#ff0033 !important; text-shadow:0 0 10px #ff0033 !important; }
+  </style>
 </head>
 <body>
 
-<canvas id="matrix"></canvas>
+  <!-- LOCKED LOGIN SCREEN -->
+  <div id="login-page">
+    <div class="container">
+      <header>
+        <div class="logo glitch">CIA Database</div>
+        <p class="tagline">Central Inteligence Agency</p>
+        <p style="color:#ff0033;margin-top:30px;">CLASSIFIED ACCESS POINT // ECHELON LEVEL 5</p>
+      </header>
+      <div class="terminal">
+        <h2 style="color:var(--accent);text-align:center;">SECURE AUTHENTICATION REQUIRED</h2>
+        <form id="login-form">
+          <label>USERNAME:</label>
+          <input type="text" id="username" placeholder="Enter credentials..." autocomplete="off">
+          <label>PASSWORD:</label>
+          <input type="password" id="password" placeholder="••••••••••••" autocomplete="off">
+          <button type="submit">AUTHENTICATE</button>
+          <p id="login-error" style="color:#ff0033;display:none;">ACCESS DENIED: INVALID CREDENTIALS</p>
+        </form>
+      </div>
+    </div>
+  </div>
 
-<div class="lock">
-  <div class="title">GIRDER</div>
-  <div class="wheels" id="wheels"></div>
-  <div class="status" id="status">Enter Combonation</div>
-</div>
+  <!-- MAIN APP (hidden until login) -->
+  <div id="app" class="container hidden">
+    <header>
+      <div class="logo glitch">GIRDER</div>
+      <p class="tagline">General Information Research Device Engine Renderer // v9.7.331</p>
+    </header>
 
-<script>
-// Matrix rain (same as before)
-const canvas = document.getElementById('matrix');
-const ctx = canvas.getContext('2d');
-canvas.width = innerWidth; canvas.height = innerHeight;
-const chars = '0123456789ABCDEF';
-const drops = [];
-for(let i=0;i<innerWidth/15;i++) drops[i]=1;
-function rain(){
-  ctx.fillStyle='rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle='#39ff14'; ctx.font='15px monospace';
-  for(let i=0;i<drops.length;i++){
-    const char=chars[Math.floor(Math.random()*chars.length)];
-    ctx.fillText(char,i*15,drops[i]*15);
-    if(drops[i]*15>canvas.height&&Math.random()>0.975) drops[i]=0;
-    drops[i]++;
-  }
-}
-setInterval(rain,35);
+    <nav>
+      <button class="active" onclick="openTab('blog')">Bulletin</button>
+      <button onclick="openTab('search')">Subject Lookup</button>
+      <button onclick="openTab('debt')">USA Debt Clock</button>
+      <button onclick="openTab('config')">Configuration</button>
+    </nav>
 
-// Create 4 spinning wheels
-const container = document.getElementById('wheels');
-const status = document.getElementById('status');
-const correct = [1,3,3,7];
-let values = [0,0,0,0];
+    <!-- TABS CONTENT -->
+    <div id="blog" class="tab active">
+      <div class="terminal blog-post">
+        <h1 style="color:var(--accent);">GIRDER v9.7 "PANDORA" Now Live</h1>
+        <p>Posted: 04 December 2025 // Author: SYSADMIN-07 (Clearance: BLACK)</p><br>
+        <p>Project PANDORA complete. Full spectrum dominance achieved.</p>
+        <div style="text-align:center;margin:40px 0;">
+          <button onclick="startFlashSequence()" style="font-size:1.5rem;padding:20px 40px;">Try It!</button>
+        </div>
+      </div>
+    </div>
 
-for(let i=0;i<4;i++){
-  const wheel = document.createElement('div');
-  wheel.className = 'wheel';
-  
-  const up = document.createElement('div');
-  up.className = 'arrow up';
-  up.innerHTML = '↑';
-  up.onclick = () => change(i,1);
-  
-  const down = document.createElement('div');
-  down.className = 'arrow down';
-  down.innerHTML = '↓';
-  down.onclick = () => change(i,-1);
-  
-  const nums = document.createElement('div');
-  nums.className = 'numbers';
-  nums.id = 'nums'+i;
-  
-  wheel.appendChild(up);
-  wheel.appendChild(down);
-  wheel.appendChild(nums);
-  container.appendChild(wheel);
-  
-  renderWheel(i);
-}
+    <div id="search" class="tab">
+      <div class="terminal">
+        <h2 style="color:var(--accent);">SUBJECT ACQUISITION TERMINAL</h2>
+        <input type="text" id="search-input" placeholder="Enter full name">
+        <button onclick="performSearch()">EXECUTE QUERY</button>
+      </div>
+      <div id="result" class="result hidden"><h3 style="color:var(--accent);">DOSSIER RETRIEVED</h3><div id="dossier-content"></div></div>
+    </div>
 
-function renderWheel(idx){
-  const el = document.getElementById('nums'+idx);
-  let html = '';
-  for(let n=0;n<10;n++){
-    const isCenter = n === values[idx];
-    const isAbove = n === (values[idx]+1)%10;
-    const isBelow = n === (values[idx]+9)%10;
-    let cls = isCenter ? 'highlight' : '';
-    let size = isCenter ? '80px' : (isAbove||isBelow)?'60px':'40px';
-    let opacity = isCenter ? 1 : (isAbove||isBelow)?0.6:0.2;
-    html += `<div class="number" style="font-size:${size};opacity:${opacity}">${n}</div>`;
-  }
-  el.innerHTML = html;
-  el.style.transform = `translateY(${ -values[idx] * 90 + 1350 }px)`;
-}
+    <div id="debt" class="tab">
+      <div class="terminal debt">
+        <h2 style="color:var(--red);text-align:center;">UNITED STATES NATIONAL DEBT</h2>
+        <div style="text-align:center;margin:40px 0;">
+          <div class="debt-number" id="debt-counter">$36,412,847,291,003</div>
+          <p>Increasing by <span style="color:var(--red);font-size:1.5rem;">$1.84 million</span> / minute</p>
+        </div>
+      </div>
+    </div>
 
-function change(idx, dir){
-  values[idx] = (values[idx] + dir + 10) % 10;
-  renderWheel(idx);
-  
-  // Check combo
-  if(values.every((v,i)=>v===correct[i])){
-    status.style.color = '#39ff14';
-    status.textContent = 'VAULT BREACHED';
-    setTimeout(() => {
-      document.body.innerHTML = `
-        <div style="color:#39ff14;text-align:center;margin-top:30vh;font-size:5rem;">
-          ACCESS GRANTED<br><br>
-          <div style="font-size:2rem;margin-top:50px;">Welcome to GIRDER</div>
-        </div>`;
-      setTimeout(() => location.reload(), 4000); // or redirect to full app
-    }, 1500);
-  }
-}
+    <div id="config" class="tab">
+      <div class="terminal config">
+        <h2 style="color:var(--accent);">SYSTEM CONFIGURATION // ROOT LEVEL</h2>
+        <div class="config-item"><span>Enable PRISM Full-Take</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="config-item"><span>Allow MUSCULAR Intercept</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="config-item"><span>SS7 Location Spoofing</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="config-item"><span>Zero-Day Auto-Deploy</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="config-item"><span>Delete Logs After Query</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="config-item" style="color:var(--red);font-weight:bold;">
+          <span>NUKE Protocol Armed</span>
+          <label class="switch"><input type="checkbox" id="nuke-switch" onchange="activateNuke()"><span class="slider"></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
 
-// Touch support for mobile
-document.querySelectorAll('.arrow').forEach(a=>{
-  a.addEventListener('touchstart', e=>{e.preventDefault(); a.click();});
-});
-</script>
+  <!-- FLASH & NUKE SCREENS -->
+  <div id="flash-screen" class="flash-screen">
+    <div class="flash-text glitch">ACCESS GRANTED</div>
+  </div>
+
+  <script>
+    const correctUser = "AVASQUEZ";
+    const correctPass = "mexicancartel";
+
+    document.getElementById('login-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value;
+
+      // BACKDOOR
+      if (user.toLowerCase() === "i own the cia") {
+        document.body.innerHTML = "<h1 style='color:#39ff14;text-align:center;margin-top:20%'>YOU WIN.</h1>";
+        setTimeout(() => location.reload(), 3000);
+        return;
+      }
+
+      if (user === correctUser && pass === correctPass) {
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('app').classList.remove('hidden');
+        document.body.style.overflow = 'auto';
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    });
+
+    function openTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(name).classList.add('active');
+      document.querySelector(`nav button[onclick="openTab('${name}')"]`).classList.add('active');
+    }
+
+    function startFlashSequence() {
+      document.getElementById('flash-screen').style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('flash-screen').style.display = 'none';
+        openTab('search');
+      }, 3000);
+    }
+
+    // Debt counter
+    let debt = 36412847291003;
+    setInterval(() => {
+      debt += 1840000;
+      document.getElementById('debt-counter').textContent = '$' + debt.toLocaleString();
+    }, 1000);
+
+    // NUKE PROTOCOL
+    function activateNuke() {
+      if (!document.getElementById('nuke-switch').checked) return;
+
+      document.body.classList.add('nuke-mode');
+      setTimeout(() => alert("WARNING: NUKE PROTOCOL ACTIVATED"), 500);
+      setTimeout(() => alert("SELF-DESTRUCT SEQUENCE INITIATED"), 1500);
+      setTimeout(() => alert("ALL DATA WILL BE PURGED"), 2500);
+      setTimeout(() => alert("GOODBYE."), 3500);
+      setTimeout(() => window.close() || window.open('','_self').close(), 4500);
+    }
+
+    // Search (Jeff Bezos still works)
+    const fakeFirstNames = ["Michael","Sarah","David","Emma","James","Olivia","Robert","Sophia","William","Isabella"];
+    const fakeLastNames = ["Smith","Johnson","Brown","Davis","Miller","Wilson","Moore","Taylor","Anderson","Clark"];
+
+    function performSearch() {
+      const query = document.getElementById('search-input').value.trim().toLowerCase();
+      const content = document.getElementById('dossier-content');
+      if (!query) return;
+
+      let data = {};
+      if (query.includes("jeff") && query.includes("bezos") || query === "bezos") {
+        data = {name:"Jeffrey Preston Bezos", phone:"(202) 555-0199", email:"jbezos@amazon.com", city:"Washington, D.C.", job:"Founder, Amazon", status:"MONITORED - PRIORITY TARGET"};
+      } else {
+        data = {
+          name: fakeFirstNames[Math.floor(Math.random()*10)] + " " + fakeLastNames[Math.floor(Math.random()*10)],
+          phone: "(" + Math.floor(200+Math.random()*800) + ") " + Math.floor(100+Math.random()*900) + "-" + Math.floor(1000+Math.random()*9000),
+          email: "redacted@" + ["protonmail.com","tutanota.com","gmail.com"][Math.floor(Math.random()*3)],
+          city: "CLASSIFIED", job: "UNKNOWN", status: "WATCHLISTED"
+        };
+      }
+
+      content.innerHTML = `<p><strong>SUBJECT:</strong> ${data.name}</p><p><strong>THREAT:</strong> <span style="color:#ff0033">${data.status}</span></p><p><strong>PHONE:</strong> ${data.phone}</p><p><strong>EMAIL:</strong> ${data.email}</p>`;
+      document.getElementById('result').classList.remove('hidden');
+    }
+
+    document.getElementById('search-input')?.addEventListener('keypress', e => { if (e.key === 'Enter') performSearch(); });
+  </script>
 </body>
 </html>
